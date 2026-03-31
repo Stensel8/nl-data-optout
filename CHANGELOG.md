@@ -27,7 +27,7 @@ en commit-berichten volgen grotendeels de stijl van [Conventional Commits](https
 ### Fixed
 - Microsoft: privacy@microsoft.com bouncet, vervangen door formulier ([#1](https://github.com/Apolloccrypt/nl-data-optout/issues/1))
 - Pinterest: privacy@pinterest.com bouncet, vervangen door formulier ([#2](https://github.com/Apolloccrypt/nl-data-optout/issues/2))
-- DPG Media: info@dpgmedia.nl bouncet, vervangen door privacy-rights formulier ([#3](https://github.com/Apolloccrypt/nl-data-optout/issues/3))
+- DPG Media: privacy@dpgmedia.nl bouncet, vervangen door privacy-rights formulier ([#3](https://github.com/Apolloccrypt/nl-data-optout/issues/3))
 - Bol.com: privacy@bol.com bouncet, ingesteld als login-only ([#4](https://github.com/Apolloccrypt/nl-data-optout/issues/4))
 - broken Medium URLs vervangen door https://medium.com/@mick.ronan.beer
 - LinkedIn URL gecorrigeerd naar https://www.linkedin.com/in/mick-beer/

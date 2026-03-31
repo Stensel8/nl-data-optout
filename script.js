@@ -8,7 +8,7 @@ const brokers = [
   { name: "Bisnode (Dun & Bradstreet)", email: "privacy@bisnode.nl", category: "Credit Bureaus" },
 
   // === AD-TECH & TRACKING ===
-  { name: "Google (Ads/Analytics)", email: "privacy@google.com", category: "Ad-Tech & Tracking", note: "Aanwezig op 100% van geteste NL nieuwssites. Bron: <a href=\"https://medium.com/@mick.ronan.beer\" target=\"_blank\">Onderzoek Volkskrant &amp; Telegraaf (Medium)</a>" },
+  { name: "Google (Ads/Analytics)", email: "privacy@google.com", category: "Ad-Tech & Tracking", note: "Aanwezig op 100% van geteste NL nieuwssites. Bron: <a href=\"https://medium.com/@mick.ronan.beer\" target=\"_blank\" rel=\"noopener noreferrer\">Onderzoek Volkskrant &amp; Telegraaf (Medium)</a>" },
   { name: "Criteo", email: "privacy@criteo.com", category: "Ad-Tech & Tracking", note: "Aanwezig op 80% van geteste NL nieuwssites" },
   { name: "Index Exchange", email: "privacy@indexexchange.com", category: "Ad-Tech & Tracking", note: "Aanwezig op 80% van geteste NL nieuwssites" },
   {
@@ -155,8 +155,8 @@ extraInput.type = 'text';
 extraInput.id = 'extra-company';
 extraInput.placeholder = 'Bijv. Bedrijfsnaam - privacy@bedrijf.nl';
 extraInput.style.display = 'none';
-companySelect.parentNode.insertBefore(extraLabel, companySelect.nextSibling.nextSibling);
-companySelect.parentNode.insertBefore(extraInput, extraLabel.nextSibling);
+companySelect.insertAdjacentElement('afterend', extraInput);
+companySelect.insertAdjacentElement('afterend', extraLabel);
 
 companySelect.addEventListener('change', () => {
   const show = companySelect.value === 'other';
@@ -201,9 +201,25 @@ function generateMail() {
       alert('Vul aub naam (en liefst email) van het bedrijf in!');
       return;
     }
-    const parts = extra.split('-').map(p => p.trim());
-    companyName = parts[0];
-    recipient = parts[1] || `privacy@${companyName.toLowerCase().replace(/[^a-z0-9]/g,'')}.nl`;
+    // Split only on the first spaced dash (including en/em dashes) to preserve hyphens in company names
+    const separators = [' - ', ' – ', ' — '];
+    let sepIndex = -1;
+    let sepLength = 0;
+    for (const sep of separators) {
+      const i = extra.indexOf(sep);
+      if (i !== -1 && (sepIndex === -1 || i < sepIndex)) {
+        sepIndex = i;
+        sepLength = sep.length;
+      }
+    }
+    if (sepIndex !== -1) {
+      companyName = extra.slice(0, sepIndex).trim();
+      const recipientPart = extra.slice(sepIndex + sepLength).trim();
+      recipient = recipientPart || `privacy@${companyName.toLowerCase().replace(/[^a-z0-9]/g,'')}.nl`;
+    } else {
+      companyName = extra;
+      recipient = `privacy@${companyName.toLowerCase().replace(/[^a-z0-9]/g,'')}.nl`;
+    }
   } else {
     const selected = brokers.find(b => b.name === company);
     if (selected) {
@@ -255,62 +271,149 @@ ${name}`;
   const selected = brokers.find(b => b.name === companyName) || brokers.find(b => b.name === company);
   const loginOnly = selected && selected.loginOnly;
 
+  const resultEl = document.getElementById('result');
+
   if (isForm) {
     if (loginOnly) {
-      document.getElementById('result').innerHTML = `
-        <h3>Geen publiek contactkanaal beschikbaar</h3>
-        <div class="warning">
-          <p><strong>${companyName}</strong> heeft geen publiek e-mailadres of formulier voor GDPR-verzoeken.</p>
-          <p>Verzoeken verlopen alleen via de ingelogde account-omgeving op hun website.</p>
-        </div>
-      `;
+      resultEl.innerHTML = '';
+      const h3 = document.createElement('h3');
+      h3.textContent = 'Geen publiek contactkanaal beschikbaar';
+      resultEl.appendChild(h3);
+      const warningDiv = document.createElement('div');
+      warningDiv.className = 'warning';
+      const p1 = document.createElement('p');
+      const strong1 = document.createElement('strong');
+      strong1.textContent = companyName;
+      p1.appendChild(strong1);
+      p1.appendChild(document.createTextNode(' heeft geen publiek e-mailadres of formulier voor GDPR-verzoeken.'));
+      warningDiv.appendChild(p1);
+      const p2 = document.createElement('p');
+      p2.textContent = 'Verzoeken verlopen alleen via de ingelogde account-omgeving op hun website.';
+      warningDiv.appendChild(p2);
+      resultEl.appendChild(warningDiv);
       return;
     }
 
+    const renderFormResult = (copied) => {
+      resultEl.innerHTML = '';
+      const h3 = document.createElement('h3');
+      h3.textContent = copied ? 'Let op: Dit bedrijf vereist een formulier' : 'Formulier vereist';
+      resultEl.appendChild(h3);
+
+      if (copied) {
+        const warningDiv = document.createElement('div');
+        warningDiv.className = 'warning';
+        const p1 = document.createElement('p');
+        const strong1 = document.createElement('strong');
+        strong1.textContent = companyName;
+        p1.appendChild(strong1);
+        p1.appendChild(document.createTextNode(' accepteert geen email meer voor GDPR-verzoeken.'));
+        warningDiv.appendChild(p1);
+        const p2 = document.createElement('p');
+        p2.textContent = 'Je moet hun contact formulier gebruiken. De tekst is gekopieerd naar je clipboard.';
+        warningDiv.appendChild(p2);
+        resultEl.appendChild(warningDiv);
+        const h4 = document.createElement('h4');
+        h4.textContent = 'Template (gekopieerd):';
+        resultEl.appendChild(h4);
+      } else {
+        const p = document.createElement('p');
+        p.textContent = 'Kopieer onderstaande tekst en plak in het formulier:';
+        resultEl.appendChild(p);
+      }
+
+      const pre = document.createElement('pre');
+      pre.style.cssText = 'background:#f5f5f5; padding:1rem; border-radius:6px; overflow:auto; max-height:300px; border:1px solid #ddd;';
+      pre.textContent = body;
+      resultEl.appendChild(pre);
+
+      const btn = document.createElement('button');
+      btn.textContent = 'Open Contact Formulier';
+      btn.addEventListener('click', () => window.open(formUrl, '_blank', 'noopener,noreferrer'));
+      resultEl.appendChild(btn);
+
+      if (copied) {
+        const infoDiv = document.createElement('div');
+        infoDiv.className = 'info';
+        infoDiv.style.marginTop = '1rem';
+        const strong2 = document.createElement('strong');
+        strong2.textContent = 'Dark Pattern Alert:';
+        infoDiv.appendChild(strong2);
+        infoDiv.appendChild(document.createTextNode(' Dit is een voorbeeld van een "dark pattern" - bedrijven maken GDPR-verzoeken moeilijker door email te vervangen met formulieren. Dit verhoogt friction en vermindert het aantal opt-outs. Overweeg dit te melden bij de '));
+        const link = document.createElement('a');
+        link.href = 'https://autoriteitpersoonsgegevens.nl/nl/zelf-doen/privacyrechten/melden';
+        link.textContent = 'Autoriteit Persoonsgegevens';
+        infoDiv.appendChild(link);
+        infoDiv.appendChild(document.createTextNode('.'));
+        resultEl.appendChild(infoDiv);
+      }
+    };
+
     navigator.clipboard.writeText(body).then(() => {
-      document.getElementById('result').innerHTML = `
-        <h3>Let op: Dit bedrijf vereist een formulier</h3>
-        <div class="warning">
-          <p><strong>${companyName}</strong> accepteert geen email meer voor GDPR-verzoeken.</p>
-          <p>Je moet hun contact formulier gebruiken. De tekst is gekopieerd naar je clipboard.</p>
-        </div>
-        <h4>Template (gekopieerd):</h4>
-        <pre style="background:#f5f5f5; padding:1rem; border-radius:6px; overflow:auto; max-height:300px; border: 1px solid #ddd;">${body}</pre>
-        <button onclick="window.open('${formUrl}', '_blank')">Open Contact Formulier</button>
-        <div class="info" style="margin-top: 1rem;">
-          <strong>Dark Pattern Alert:</strong> Dit is een voorbeeld van een "dark pattern" - bedrijven maken GDPR-verzoeken moeilijker door email te vervangen met formulieren.
-          Dit verhoogt friction en vermindert het aantal opt-outs. Overweeg dit te melden bij de
-          <a href="https://autoriteitpersoonsgegevens.nl/nl/zelf-doen/privacyrechten/melden">Autoriteit Persoonsgegevens</a>.
-        </div>
-      `;
+      renderFormResult(true);
     }).catch(() => {
       alert('Kon tekst niet kopieren naar clipboard. Kopieer handmatig uit onderstaand vak.');
-      document.getElementById('result').innerHTML = `
-        <h3>Formulier vereist</h3>
-        <p>Kopieer onderstaande tekst en plak in het formulier:</p>
-        <pre style="background:#f5f5f5; padding:1rem; border-radius:6px; overflow:auto; max-height:300px;">${body}</pre>
-        <button onclick="window.open('${formUrl}', '_blank')">Open Contact Formulier</button>
-      `;
+      renderFormResult(false);
     });
   } else {
     const mailto = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
-    document.getElementById('result').innerHTML = `
-      <h3>Klaar! Open de mail:</h3>
-      <p><strong>Naar:</strong> ${recipient}</p>
-      <p><strong>Onderwerp:</strong> ${subject}</p>
-      <h4>Template:</h4>
-      <pre style="background:#f5f5f5; padding:1rem; border-radius:6px; overflow:auto; max-height:300px; border: 1px solid #ddd;">${body}</pre>
-      <button onclick="window.location='${mailto}'">Open in mailprogramma</button>
-      <button class="secondary" onclick="navigator.clipboard.writeText(\`${body.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`).then(() => alert('Tekst gekopieerd naar clipboard!'))">Kopieer Tekst</button>
-      <p style="margin-top:1rem; font-size:0.9rem; color:#666;">
-        <strong>Tip:</strong> Werkt "mailto:" niet? Gebruik "Kopieer Tekst" en plak in je mail-app.
-      </p>
-    `;
+    resultEl.innerHTML = '';
+    const h3 = document.createElement('h3');
+    h3.textContent = 'Klaar! Open de mail:';
+    resultEl.appendChild(h3);
+
+    const pTo = document.createElement('p');
+    const strongTo = document.createElement('strong');
+    strongTo.textContent = 'Naar:';
+    pTo.appendChild(strongTo);
+    pTo.appendChild(document.createTextNode(' ' + recipient));
+    resultEl.appendChild(pTo);
+
+    const pSubject = document.createElement('p');
+    const strongSubject = document.createElement('strong');
+    strongSubject.textContent = 'Onderwerp:';
+    pSubject.appendChild(strongSubject);
+    pSubject.appendChild(document.createTextNode(' ' + subject));
+    resultEl.appendChild(pSubject);
+
+    const h4 = document.createElement('h4');
+    h4.textContent = 'Template:';
+    resultEl.appendChild(h4);
+
+    const pre = document.createElement('pre');
+    pre.style.cssText = 'background:#f5f5f5; padding:1rem; border-radius:6px; overflow:auto; max-height:300px; border:1px solid #ddd;';
+    pre.textContent = body;
+    resultEl.appendChild(pre);
+
+    const openBtn = document.createElement('button');
+    openBtn.textContent = 'Open in mailprogramma';
+    openBtn.addEventListener('click', () => { window.location = mailto; });
+    resultEl.appendChild(openBtn);
+
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'secondary';
+    copyBtn.textContent = 'Kopieer Tekst';
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(body).then(() => alert('Tekst gekopieerd naar clipboard!'));
+    });
+    resultEl.appendChild(copyBtn);
+
+    const tip = document.createElement('p');
+    tip.style.cssText = 'margin-top:1rem; font-size:0.9rem; color:#666;';
+    const tipStrong = document.createElement('strong');
+    tipStrong.textContent = 'Tip:';
+    tip.appendChild(tipStrong);
+    tip.appendChild(document.createTextNode(' Werkt "mailto:" niet? Gebruik "Kopieer Tekst" en plak in je mail-app.'));
+    resultEl.appendChild(tip);
   }
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('broker-count').innerHTML =
-    `<strong>${brokers.length} Nederlandse data brokers</strong> beschikbaar`;
+  const brokerCountEl = document.getElementById('broker-count');
+  brokerCountEl.innerHTML = '';
+  const strong = document.createElement('strong');
+  strong.textContent = `${brokers.length} Nederlandse data brokers`;
+  brokerCountEl.appendChild(strong);
+  brokerCountEl.appendChild(document.createTextNode(' beschikbaar'));
 });
