@@ -13,7 +13,31 @@ Tool voor het versturen van GDPR-verzoeken naar Nederlandse data brokers.
 3. Kies het type verzoek (bezwaar, wissen, inzage, of beide)
 4. Klik "Genereer e-mail"
 
-Lokaal: clone de repo, installeer Hugo en voer `hugo server` uit. Geen externe server nodig.
+
+### Ontwikkelen en bouwen
+
+Deze site gebruikt [Hugo](https://gohugo.io/) als static site generator. Voor lokale ontwikkeling:
+
+1. Installeer Hugo (extended versie aanbevolen)
+2. Clone deze repo
+3. Start een lokale server met:
+	```
+	hugo server
+	```
+4. Of bouw de site voor productie met:
+	```
+	hugo --minify --baseURL "https://apolloccrypt.github.io/nl-data-optout/"
+	```
+
+De output verschijnt in de map `public/`. Open `public/index.html` direct in je browser om te testen.
+
+### Automatische deployment
+
+Bij elke push naar `main` wordt de site automatisch gebouwd en gedeployed naar GitHub Pages via een [GitHub Actions workflow](.github/workflows/deploy.yml). Hierbij wordt de baseURL altijd geforceerd naar de upstream URL (`https://apolloccrypt.github.io/nl-data-optout/`), zodat alle links en assets correct werken.
+
+**Let op:** Alleen de inhoud van `public/` wordt gepubliceerd. De maintainer hoeft niets aan te passen aan zijn GitHub Pages-instellingen.
+
+Wil je bijdragen? Zie [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Achtergrond
 
