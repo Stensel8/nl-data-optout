@@ -8,79 +8,67 @@ en commit-berichten volgen grotendeels de stijl van [Conventional Commits](https
 
 ---
 
-## [1.2.0] - 2026-03-31
-
-### Added
-- bronlink voor Google in de update-banner (onderzoek Volkskrant & Telegraaf)
+## [2.0.1] - 2026-04-10
 
 ### Changed
-- code uitgesplitst in aparte bestanden: script.js, style.css
-- alle code-identifiers omgezet naar Engels met consistente conventies
-  (camelCase voor JS, kebab-case voor HTML IDs en CSS)
-- interne form-values omgezet naar Engels (bezwaar/wissen/inzage/beide vervallen)
-- donatie-knop verplaatst naar footer, minder prominent
-- UI rustigere kleuren, geen emoji
-- documentatie herschreven: README, CONTRIBUTING, DEPLOYMENT en CHANGELOG ingekort
-  en opgeschoond; veel herhaalde, lange en overbodige tekst verwijderd
-- REPO-OVERVIEW.md verwijderd
+- visuele stijl gelijkgetrokken met [mickbeer.com](https://mickbeer.com)
+- contrast en kleurproblemen opgelost: donate-knop, dark mode kleurtokens, taalschakelaar separator
+- footer ingekort: toont nu alleen versienummer en datum
+
+---
+
+## [2.0.0] - 2026-04-10
+
+### Changed
+- volledige herbouw als Hugo statische site (van losse index.html naar Hugo-template systeem)
+- meertalige ondersteuning: Nederlands (standaard) en Engels via Hugo i18n
+- nieuwe visuele stijl geïnspireerd op [mickbeer.com](https://mickbeer.com): crème achtergrond, Playfair Display serif headings, amber accenten
+- GitHub Pages URL: `https://apolloccrypt.github.io/nl-data-optout/`
+- footer uitgebreid: changelog-link, versienummer, donatie-knop, LinkedIn en Medium links
+- donatie-knop (Buy me a coffee) in footer van elke pagina
+- GitHub Actions workflow bijgewerkt voor Hugo deploy op push naar `main`
+- "Over dit project" sectie uitgebreid met toelichting over reikwijdte: NL-markt + buitenlandse partijen actief in Nederland
+- alle UI-strings in script.js tweetalig (Nederlands/Engels) via `window.SITE_LANG`
 
 ### Fixed
-- Microsoft: privacy@microsoft.com bouncet, vervangen door formulier ([#1](https://github.com/Apolloccrypt/nl-data-optout/issues/1))
-- Pinterest: privacy@pinterest.com bouncet, vervangen door formulier ([#2](https://github.com/Apolloccrypt/nl-data-optout/issues/2))
-- DPG Media: privacy@dpgmedia.nl bouncet, vervangen door privacy-rights formulier ([#3](https://github.com/Apolloccrypt/nl-data-optout/issues/3))
-- Bol.com: privacy@bol.com bouncet, ingesteld als login-only ([#4](https://github.com/Apolloccrypt/nl-data-optout/issues/4))
-- broken Medium URLs vervangen door https://medium.com/@mick.ronan.beer
-- LinkedIn URL gecorrigeerd naar https://www.linkedin.com/in/mick-beer/
-- lege result-div werd getoond als groene balk (#result:empty hidden)
-- CHANGELOG liep tot v1.1.0 terwijl de site al v1.1.1 toonde
-- links naar CHANGELOG.md en LICENSE in footer zijn nu relatief
+- broker-teller toont correct "Nederlandse data brokers"
+
+---
+
+## [1.2.1] - 2026-04-06
+
+- Wayback Machine / Internet Archive toegevoegd als data broker
+- NL/EN taalschakelaar bij e-mail generatieknop
+- Broker-teller gecorrigeerd naar "Nederlandse data brokers"
+
+---
+
+## [1.2.0] - 2026-03-31
+
+- Code uitgesplitst in script.js en style.css
+- Identifiers omgezet naar Engels (camelCase JS, kebab-case HTML/CSS)
+- Microsoft ([#1](https://github.com/Apolloccrypt/nl-data-optout/issues/1)), Pinterest ([#2](https://github.com/Apolloccrypt/nl-data-optout/issues/2)), DPG Media ([#3](https://github.com/Apolloccrypt/nl-data-optout/issues/3)) omgezet naar formulier; Bol.com ([#4](https://github.com/Apolloccrypt/nl-data-optout/issues/4)) login-only
+- Documentatie (README, CONTRIBUTING, DEPLOYMENT, CHANGELOG) ingekort
 
 ---
 
 ## [1.1.1] - 2026-03-22
 
-### Fixed
-- Xandr: privacy@xandr.com bouncet, vervangen door Microsoft privacy formulier
-- SmartOcto: privacy@smartocto.com bouncet, vervangen door dpo@smartocto.com
-- ontbrekende komma's in de brokers array veroorzaakten parse-fouten
-- Xandr en SmartOcto misten een category-veld
-- diverse contactadressen bijgewerkt
-
-### Added
-- notitie bij Xandr: 0% GDPR response rate (noyb 2024)
+- Xandr en SmartOcto contactadressen gecorrigeerd (bouncende e-mails)
+- Xandr: 0% GDPR response rate toegevoegd (noyb 2024)
+- Parse-fouten in brokers array opgelost
 
 ---
 
 ## [1.1.0] - 2026-03-21
 
-### Added
-- detectie van bedrijven die geen email meer accepteren, met formulier-instructies
-- waarschuwingsbanner voor bedrijven met speciale instructies
-- 60+ brokers (was 25)
-- categorieteller in de dropdown
-- dark pattern waarschuwing bij formulier-vereiste bedrijven
-- kopieer-naar-clipboard knop
-- GitHub Issue templates (broken contact, feature request)
-
-### Changed
-- broker objectstructuur uitgebreid met note, isForm en formUrl velden
-- email template opmaak verbeterd
-- footer met versienummer en changelog link
-
-### Fixed
-- Meta: datarequests@support.facebook.com vervangen door formulier
-- JavaScript escaping voor backticks en dollar signs in clipboard copy
-- weergave op kleine schermen
+- 60+ brokers (was 25), verdeeld in categorieen met teller
+- Formulierdetectie met waarschuwingsbanner en dark pattern notitie
+- Kopieer-naar-klembord knop
+- Meta omgezet naar formulier
 
 ---
 
 ## [1.0.0] - 2026-03-20
 
-### Added
-- eerste release met 25 Nederlandse data brokers
-- GDPR Art. 21 (bezwaar), Art. 17 (wissen), Art. 15 (inzage)
-- categorieen: Credit Bureaus, Ad-Tech, Media, Telecom, Retail
-- "ander bedrijf" optie voor handmatige invoer
-- alles lokaal, geen server
-- MIT licentie
-- GitHub Pages hosting
+- Eerste release: 25 NL data brokers, Art. 15/17/21, lokaal, MIT

@@ -2,8 +2,23 @@
 
 Live site: https://apolloccrypt.github.io/nl-data-optout/
 
-GitHub Pages bouwt automatisch vanuit de `main` branch. Na een push duurt het
-ongeveer een minuut voordat de wijziging live is.
+
+## Automatische deployment met Hugo & GitHub Actions
+
+Deze site gebruikt [Hugo](https://gohugo.io/) als static site generator. Bij elke push naar `main` wordt de site automatisch gebouwd en gedeployed naar GitHub Pages via een [GitHub Actions workflow](.github/workflows/deploy.yml).
+
+**BaseURL:** De workflow forceert altijd de baseURL naar `https://apolloccrypt.github.io/nl-data-optout/`, zodat alle links en assets correct werken op de upstream site.
+
+**Output:** Alleen de inhoud van de map `public/` wordt gepubliceerd. De maintainer hoeft niets aan te passen aan zijn GitHub Pages-instellingen.
+
+**Testen:**
+1. Bouw lokaal met:
+  ```
+  hugo --minify --baseURL "https://apolloccrypt.github.io/nl-data-optout/"
+  ```
+2. Open `public/index.html` direct in je browser.
+
+Na een push duurt het ongeveer een minuut voordat de wijziging live is.
 
 ## Broker toevoegen
 

@@ -14,13 +14,12 @@ verwerkt van Nederlandse burgers, en een publiek privacycontact heeft.
 
 ## Code bijdragen
 
-HTML, CSS en vanilla JavaScript. Geen frameworks, geen build stap.
-Fork de repo, maak je wijzigingen, test lokaal door index.html te openen in de browser,
-en open een pull request. Voeg een regel toe aan CHANGELOG.md.
+De site gebruikt [Hugo](https://gohugo.io/). Fork de repo, installeer Hugo en run
+`hugo server` om lokaal te testen. Open een pull request en voeg een regel toe aan CHANGELOG.md.
 
-Geen externe dependencies, geen server-side code, geen tracking.
+Geen server-side code, geen tracking.
 
 ## Vragen
 
-https://github.com/Apolloccrypt/nl-data-optout/issues
-https://www.linkedin.com/in/mick-beer/
+- https://github.com/Apolloccrypt/nl-data-optout/issues
+- https://www.linkedin.com/in/mick-beer/
