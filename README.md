@@ -2,16 +2,18 @@
 
 Tool voor het versturen van GDPR-verzoeken naar Nederlandse data brokers.
 
-Live: https://apolloccrypt.github.io/nl-data-optout/
+**Live: [apolloccrypt.github.io/nl-data-optout](https://apolloccrypt.github.io/nl-data-optout/)**
+
+[![Preview](preview.avif)](https://apolloccrypt.github.io/nl-data-optout/)
 
 ## Gebruik
 
 1. Vul naam en emailadres in
 2. Selecteer een bedrijf
 3. Kies het type verzoek (bezwaar, wissen, inzage, of beide)
-4. Klik "Genereer bezwaarmail"
+4. Klik "Genereer e-mail"
 
-Lokaal: clone de repo en open index.html in je browser. Geen server nodig.
+Lokaal: clone de repo, installeer Hugo en voer `hugo server` uit. Geen externe server nodig.
 
 ## Achtergrond
 
@@ -21,11 +23,20 @@ Onderzoek: https://medium.com/@mick.ronan.beer
 
 ## Ondersteunde bedrijven
 
-60+ bedrijven verdeeld over credit bureaus, ad-tech, media, telecom, retail, analytics en marketing clouds. Zie script.js voor de volledige lijst. Er is ook een "ander bedrijf" optie voor handmatige invoer.
+60+ bedrijven verdeeld over credit bureaus, ad-tech, media, telecom, retail, analytics en marketing clouds. Zie `static/js/script.js` voor de volledige lijst. Er is ook een "ander bedrijf" optie voor handmatige invoer.
 
 ## Privacy
 
 Alles draait lokaal. Geen server, geen opslag, geen tracking. De tool genereert alleen tekst, jij verstuurt de mail zelf.
+
+## v2.0.0 — Hugo rebuild
+
+Vanaf v2.0.0 is de site gebouwd met [Hugo](https://gohugo.io/):
+
+- Meertalig (NL standaard, EN beschikbaar)
+- Nieuw visueel ontwerp geïnspireerd op [mickbeer.com](https://mickbeer.com)
+- GitHub Actions deploy op push naar `main`
+- Uitgebreide footer met changelog, donatie en contact links
 
 ## Bijdragen
 
@@ -37,4 +48,4 @@ MIT. Zie [LICENSE](LICENSE).
 
 ## Contact
 
-Mick Beer — https://www.linkedin.com/in/mick-beer/
+Mick Beer — https://mickbeer.com — https://www.linkedin.com/in/mick-beer/

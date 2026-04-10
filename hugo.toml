@@ -1,26 +1,30 @@
-baseURL = "https://data-optout.stensel.nl/"
-defaultContentLanguage = "en"
+baseURL = "https://apolloccrypt.github.io/nl-data-optout/"
+defaultContentLanguage = "nl"
 defaultContentLanguageInSubdir = false
 enableRobotsTXT = true
 disableKinds = ["taxonomy", "term"]
 
 [languages]
-  [languages.en]
-    languageCode = "en"
-    languageName = "English"
-    title = "OptOut EU"
-    weight = 1
-    [languages.en.params]
-      description = "Generate GDPR requests to 60+ European data brokers in minutes. Runs 100% locally — no data stored."
-
   [languages.nl]
     languageCode = "nl"
     languageName = "Nederlands"
-    title = "OptOut EU"
-    weight = 2
+    title = "NL Data Opt-Out"
+    weight = 1
     [languages.nl.params]
-      description = "Genereer GDPR-verzoeken naar 60+ Europese data brokers in minuten. 100% lokaal — geen data opgeslagen."
+      description = "Genereer gratis GDPR-verzoeken naar 60+ Nederlandse data brokers. 100% lokaal — geen data opgeslagen."
+
+  [languages.en]
+    languageCode = "en"
+    languageName = "English"
+    title = "NL Data Opt-Out"
+    weight = 2
+    [languages.en.params]
+      description = "Generate free GDPR requests to 60+ Dutch data brokers. Runs 100% locally — no data stored."
 
 [params]
-  github = "https://github.com/Stensel8/data-optout"
-  version = "2.0.0"
+  github = "https://github.com/Apolloccrypt/nl-data-optout"
+  version = "2.0.1"
+  author = "Mick Beer"
+  authorUrl = "https://mickbeer.com"
+  linkedin = "https://www.linkedin.com/in/mick-beer/"
+  donate = "https://www.buymeacoffee.com/mickbeer"
